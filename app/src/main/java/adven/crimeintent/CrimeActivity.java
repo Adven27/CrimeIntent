@@ -1,22 +1,23 @@
 package adven.crimeintent;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.content.Intent;
+import android.support.annotation.NonNull;
 
-public class CrimeActivity extends AppCompatActivity {
+public class CrimeActivity extends AbstractFragmentActivity {
 
+    private static final String EXTRA_CRIME_ID = "adven.crimeintent.crime_id";
+    public static String EXTRA_EDITED_CRIME_ID = "adven.crimeintent.edited_crime_id";
+
+    @NonNull
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_crime);
+    public CrimeFragment createFragment() {
+        int crimeId = getIntent().getIntExtra(EXTRA_CRIME_ID, 0);
+        return CrimeFragment.newInstance(crimeId);
+    }
 
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
-        if (fragment == null) {
-            fragment = new CrimeFragment();
-            fm.beginTransaction().add(R.id.fragment_container, fragment).commit();
-        }
+    public static Intent newIntent(CrimeListActivity crimeListActivity, int crime) {
+        Intent intent = new Intent(crimeListActivity, CrimeActivity.class);
+        intent.putExtra(EXTRA_CRIME_ID, crime);
+        return intent;
     }
 }
